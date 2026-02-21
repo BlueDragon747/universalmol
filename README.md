@@ -18,7 +18,7 @@ Universal Molecule is a clone of Photon with a difficulty-responsive reward syst
 | Block reward | 2 UMO (stable/falling difficulty), 0.05 UMO (rising difficulty) |
 | Difficulty retarget | Every 10 blocks (~20 min), max 3% increase |
 | Block maturity | 120 confirmations |
-| Default port | 18449 |
+| Default port | 24785 |
 | RPC port | 19738 |
 | Max supply | 105,120,001 UMO |
 
@@ -164,6 +164,7 @@ Uses `sidgrip/osxcross-base:latest` Docker image with osxcross cross-compiler.
 
 ```
 outputs/
+├── universalmolecule.conf  Auto-generated config with RPC credentials and peers
 ├── native/
 │   ├── daemon/         universalmoleculed
 │   └── qt/             universalmolecule-qt
@@ -177,7 +178,7 @@ outputs/
     └── qt/             UniversalMolecule-Qt.app
 ```
 
-Each output directory includes a `build-info.txt` with OS version and build details.
+The config file is auto-generated on first build with random RPC credentials, active peers from the network, and default settings. Copy it to `~/.universalmolecule/universalmolecule.conf` before running the daemon.
 
 ## Docker Images
 
