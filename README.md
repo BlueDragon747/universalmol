@@ -27,7 +27,7 @@ Universal Molecule is a clone of Photon with a difficulty-responsive reward syst
 ## Quick Start (Ubuntu 18.04)
 
 ```bash
-git clone https://github.com/SidGrip/universalmol.git
+git clone https://github.com/BlueDragon747/universalmol.git
 cd universalmol
 sudo add-apt-repository ppa:bitcoin/bitcoin
 sudo apt update
@@ -70,7 +70,7 @@ Other options:
 ## Platform Build Instructions
 
 ```bash
-git clone https://github.com/SidGrip/universalmol.git
+git clone https://github.com/BlueDragon747/universalmol.git
 cd universalmol
 ```
 
