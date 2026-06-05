@@ -2116,6 +2116,9 @@ fi
 # tree is forced through C++11. Moving the Windows cross-build to C++17 avoids
 # those multiple-definition link failures without changing other host paths.
 find . -name Makefile -type f -exec sed -i "s/-std=c++11/-std=c++17/g" {} +
+# MXE mingw g++ rejects this C-only precision flag for C++; keep the other
+# floating-point determinism flags intact.
+find . -name Makefile -type f -exec sed -i "s/ -fexcess-precision=standard//g" {} +
 
 # Fix missing Qt translation files (UniversalMolecule fork does not include them)
 if [ -f src/Makefile ]; then
@@ -2840,6 +2843,10 @@ echo ">>> Building Qt wallet with autotools..."
 ./autogen.sh
 ./configure --disable-tests --disable-bench --disable-fuzz-binary --enable-upnp-default \
     CXXFLAGS="-O2 -DBOOST_BIND_GLOBAL_PLACEHOLDERS" LDFLAGS="-static-libstdc++"
+
+# The AppImage base compiler can reject this C-only precision flag for C++.
+# Keep the other floating-point determinism flags intact.
+find . -name Makefile -type f -exec sed -i "s/ -fexcess-precision=standard//g" {} +
 
 # Fix missing Qt translation files (UniversalMolecule fork does not include them)
 if [ -f src/Makefile ]; then
