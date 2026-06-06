@@ -1923,6 +1923,24 @@ AC_SUBST(BITCOIN_WALLET_TOOL_NAME)
 AC_SUBST(BITCOIN_MP_NODE_NAME)
 AC_SUBST(BITCOIN_MP_GUI_NAME)
 
+dnl ---- Consensus-critical floating-point determinism (universalmol) ----
+dnl universalmol's block subsidy (GetBlockSubsidy via LegacyRewardDifficultyTrendIsRising
+dnl in src/validation.cpp) picks a consensus reward (0.1 vs 2 UMO) from an IEEE-754
+dnl floating-point difficulty comparison. Every validator must reproduce a byte-identical
+dnl result or the chain forks, so the build must keep strict IEEE-754 semantics. Refuse
+dnl known-unsafe flags, then pin the deterministic ones. The pins are already the effective
+dnl defaults on x86-64; pinning them stops a future toolchain/CI change from silently
+dnl breaking consensus. AX_CHECK_COMPILE_FLAG skips any flag the target compiler rejects
+dnl (e.g. -msse2/-mfpmath on non-x86, or -fexcess-precision on clang).
+case " $CXXFLAGS $CFLAGS $CPPFLAGS $CORE_CXXFLAGS " in
+  *" -ffast-math "*|*" -Ofast "*|*" -funsafe-math-optimizations "*|*" -ffp-contract=fast "*)
+    AC_MSG_ERROR([refusing to build with non-IEEE-754 floating point (-ffast-math / -Ofast / -funsafe-math-optimizations / -ffp-contract=fast): universalmol's consensus block subsidy depends on deterministic IEEE-754 results. Remove the flag.])
+  ;;
+esac
+AX_CHECK_COMPILE_FLAG([-ffp-contract=off], [CORE_CXXFLAGS="$CORE_CXXFLAGS -ffp-contract=off"], [], [$CXXFLAG_WERROR])
+AX_CHECK_COMPILE_FLAG([-fexcess-precision=standard], [CORE_CXXFLAGS="$CORE_CXXFLAGS -fexcess-precision=standard"], [], [$CXXFLAG_WERROR])
+AX_CHECK_COMPILE_FLAG([-msse2 -mfpmath=sse], [CORE_CXXFLAGS="$CORE_CXXFLAGS -msse2 -mfpmath=sse"], [], [$CXXFLAG_WERROR])
+
 AC_SUBST(RELDFLAGS)
 AC_SUBST(CORE_LDFLAGS)
 AC_SUBST(CORE_CPPFLAGS)
