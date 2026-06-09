@@ -168,6 +168,29 @@ Other options:
   --jobs N          Parallel make jobs
 ```
 
+
+<!-- BEGIN electrium-build -->
+### Electrium Wallet
+
+Build the UniversalMolecule ([Electrium](https://github.com/SidGrip/Blakestream-Electrium)) wallet by
+choosing a target (linux/windows build in an **amd64** container, so any amd64 Docker host — Linux,
+Windows, or an Intel Mac — can build either; only the macOS app needs a Mac):
+
+```bash
+./build-electrum.sh linux      # Linux AppImage    (amd64 Docker host)
+./build-electrum.sh windows    # Windows .exe      (amd64 Docker host)
+./build-electrum.sh macos      # macOS .dmg/.app   (on a Mac)
+./build-electrum.sh all        # everything buildable on this host
+```
+
+Artifacts land in `outputs/Electrium/UMO/`, named `Electrium-UMO-<version>`.
+
+The wallet builder is the shared multicoin repo
+**[SidGrip/Blakestream-Electrium](https://github.com/SidGrip/Blakestream-Electrium)** — it also builds
+all six BlakeStream wallets at once (`build-single-wallets.sh`) and the ElectrumX **server** Docker
+image (`build-electrumx.sh`). `build-electrum.sh` auto-clones it when no local checkout is found.
+<!-- END electrium-build -->
+
 ## Platform Build Instructions
 
 ### Native Linux
