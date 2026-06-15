@@ -3235,6 +3235,10 @@ echo ">>> Configuring..."
 ./configure --disable-tests --disable-bench --disable-fuzz-binary '"$configure_extra"' \
     CXXFLAGS="-O2 -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
 
+# GCC 11 in the Ubuntu 22 native container accepts the configure probe for
+# this precision flag, but rejects it when compiling C++ sources.
+find . -name Makefile -type f -exec sed -i "s/ -fexcess-precision=standard//g" {} +
+
 	if is_enabled "$BLAKE_ENABLE_SQLITE" && ! grep -q "^USE_SQLITE=true$" test/config.ini; then
 	    echo "ERROR: SQLite was requested but USE_SQLITE=true is absent from test/config.ini"
 	    exit 1
